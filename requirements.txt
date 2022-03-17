@@ -1,0 +1,4 @@
+chromedriver-py==99.0.4844.51
+selenium
+babel
+prettytable
