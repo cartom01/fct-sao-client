@@ -1,5 +1,9 @@
 # fct-sao-client
 
+![Screenshot](screenshot.png)
+
+---
+
 Script que accede a FCT SAO mediante selenium y chrome webdriver
 
 Inicia sesión con los datos que lee de los ficheros `user.txt` y `cp.txt`
@@ -15,7 +19,7 @@ Envía los datos y cierra sesión
 ## Mejoras
 
 - [x] Mostrar información: horas realizadas, horas que quedan
-- [ ] Dar la bienvenida
+- [x] Dar la bienvenida
 - [x] Comprobar si hay algo escrito en los campos y preguntar si se quiere borrar o modificar
 - [ ] Mostrar toda la semana
 - [ ] Poner el webdriver en modo headless (lo último)
