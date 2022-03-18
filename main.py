@@ -69,18 +69,18 @@ def get_weekday_number():
 
 # Print today
 ## TODO: Print all week
-print("\n\n\nHoy es " + weekday + "\n")
+print("\nHola " + user_id + "\n\nHoy es " + weekday + "\n")
 
 pretty = PrettyTable()
 pretty._max_width = {"Descripción Actividad":30}
 pretty.field_names = ["Descripción Actividad", "Orientaciones", "Observaciones", "Horas"]
 
-celda1 = driver.find_element(By.XPATH,'//div[@id="diario'+get_weekday_number()+'"]/table/tbody/tr[2]/td[1]').text
-celda2 = driver.find_element(By.XPATH,'//div[@id="diario'+get_weekday_number()+'"]/table/tbody/tr[2]/td[2]').text
-celda3 = driver.find_element(By.XPATH,'//div[@id="diario'+get_weekday_number()+'"]/table/tbody/tr[2]/td[3]').text
-celda4 = driver.find_element(By.XPATH,'//div[@id="diario'+get_weekday_number()+'"]/table/tbody/tr[2]/td[4]').text
+celda_list = []
+celdas = driver.find_elements(By.XPATH,'//div[@id="diario'+get_weekday_number()+'"]/table/tbody/tr[2]/td')
+for i in range(0,len(celdas)):
+    celda_list.append(celdas[i].get_attribute('innerHTML'))
 
-pretty.add_row([celda1,celda2,celda3,celda4])
+pretty.add_row(celda_list)
 print(pretty)
 
 # Find today's modify button
@@ -110,8 +110,10 @@ send_button.click()
 # Show remaining hours
 driver.refresh()
 time.sleep(2)
-horas = driver.find_element(By.XPATH,'//*[@id="contenedorDetallesFCT"]/table/tbody/tr[14]/td[4]').text
-print("\n\nLlevas\t" + horas + " te quedan")
+horas = driver.find_element(By.XPATH,'//*[@id="contenedorDetallesFCT"]/table/tbody/tr[14]/td[4]').text.replace(" ","").split('/')
+horas_restantes = int(horas[1]) - int(horas[0])
+print("\n\nLlevas " + horas[0] + " horas\nTe quedan " + str(horas_restantes) + " horas\nA razón de 8 horas diarias aún te quedan " + str(horas_restantes/8) + " días")
+print("\nTe quedan " + str(5 - int(get_weekday_number())) + " días para acabar la semana")
 
 # Log out
 logout_button = driver.find_element(By.CSS_SELECTOR,"input[name='logout']")
