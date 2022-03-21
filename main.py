@@ -25,6 +25,7 @@ weekday = format_date(d, "EEEE", locale='es').capitalize()
 options = webdriver.ChromeOptions()
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
+options.add_argument("--headless")
 driver = webdriver.Chrome(service=service_object, options=options)
 
 # Open the website
@@ -54,7 +55,6 @@ login_button.click()
 fcts_button = driver.find_element(By.XPATH,'//a[@href="/index.php?op=2)"]')
 fcts_button.click()
 
-# Find descripción actividad field of today
 def get_weekday_number():
     if weekday == "Lunes":
         return "0"
@@ -67,21 +67,41 @@ def get_weekday_number():
     if weekday == "Viernes":
         return "4"
 
-# Print today
-## TODO: Print all week
-print("\nHola " + user_id + "\n\nHoy es " + weekday + "\n")
+def get_number_weekday(n):
+    if n == 0:
+        return "Lunes"
+    if n == 1:
+        return "Martes"
+    if n == 2:
+        return "Miércoles"
+    if n == 3:
+        return "Jueves"
+    if n == 4:
+        return "Viernes"
 
-pretty = PrettyTable()
-pretty._max_width = {"Descripción Actividad":30}
-pretty.field_names = ["Descripción Actividad", "Orientaciones", "Observaciones", "Horas"]
+time.sleep(3)
 
-celda_list = []
-celdas = driver.find_elements(By.XPATH,'//div[@id="diario'+get_weekday_number()+'"]/table/tbody/tr[2]/td')
-for i in range(0,len(celdas)):
-    celda_list.append(celdas[i].get_attribute('innerHTML'))
+# Welcome
+student_name = driver.find_element(By.XPATH,'//*[@id="contenedorDetallesFCT"]/table/tbody/tr[2]/td[2]').text.lower().split(" ")
+print("\nHola " + student_name[0].capitalize() + "\nHoy es " + weekday + "\n")
 
-pretty.add_row(celda_list)
-print(pretty)
+# Print this week
+print(driver.find_element(By.XPATH,'//select[@id="semanaDiario"]/option[@selected="selected"]').text)
+
+# Print table
+for i in range(0,5):
+    print(get_number_weekday(i))
+    pretty = PrettyTable()
+    pretty._max_width = {"Descripción Actividad":30}
+    pretty.field_names = ["Descripción Actividad", "Orientaciones", "Observaciones", "Horas"]
+
+    celda_list = []
+    celdas = driver.find_elements(By.XPATH,'//div[@id="diario' + str(i) + '"]/table/tbody/tr[2]/td')
+    for i in range(0,len(celdas)):
+        celda_list.append(celdas[i].get_attribute('innerHTML'))
+
+    pretty.add_row(celda_list)
+    print(pretty)
 
 # Find today's modify button
 today_p = driver.find_element(By.XPATH,'//span[text()="'+weekday+'"]/preceding-sibling::a/img')
@@ -91,7 +111,7 @@ time.sleep(3)
 
 # Send Descripción Actividad
 descripcion_actividad = driver.find_element(By.XPATH,'//textarea[@id="descripcion' + get_weekday_number() + '"]')
-eleccion = input("¿Quieres modificar el campo Descripción Actividad? (s/N): ").lower()
+eleccion = input("¿Quieres modificar el campo Descripción Actividad de hoy " + weekday + "? (s/N): ").lower()
 if eleccion == "s":
     descripcion_actividad.clear()
     descripcion_actividad_input = input("\n¿Qué has hecho hoy?: \n")
@@ -100,7 +120,7 @@ if eleccion == "s":
 # Send Horas
 horas_object = driver.find_element(By.XPATH,'//input[@id="tiempo' + get_weekday_number() + '"]')
 horas_object.clear()
-horas_input = int(input("\n¿Cuántas horas has hecho hoy? - [Por defecto: 8] \n") or "8")
+horas_input = int(input("\n¿Cuántas horas has hecho hoy? - [Por defecto: 8] ") or "8")
 horas_object.send_keys(horas_input)
 
 # Click send
@@ -113,7 +133,7 @@ time.sleep(2)
 horas = driver.find_element(By.XPATH,'//*[@id="contenedorDetallesFCT"]/table/tbody/tr[14]/td[4]').text.replace(" ","").split('/')
 horas_restantes = int(horas[1]) - int(horas[0])
 print("\n\nLlevas " + horas[0] + " horas\nTe quedan " + str(horas_restantes) + " horas\nA razón de 8 horas diarias aún te quedan " + str(horas_restantes/8) + " días")
-print("\nTe quedan " + str(5 - int(get_weekday_number())) + " días para acabar la semana")
+print("\nTe quedan " + str(4 - int(get_weekday_number())) + " días para acabar la semana")
 
 # Log out
 logout_button = driver.find_element(By.CSS_SELECTOR,"input[name='logout']")
