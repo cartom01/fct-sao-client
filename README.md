@@ -21,9 +21,9 @@ Envía los datos y cierra sesión
 - [x] Mostrar información: horas realizadas, horas que quedan
 - [x] Dar la bienvenida
 - [x] Comprobar si hay algo escrito en los campos y preguntar si se quiere borrar o modificar
-- [ ] Mostrar lo que llevamos de semana
+- [x] Mostrar lo que llevamos de semana
 - [x] Poner el webdriver en modo headless (lo último)
-- [ ] Poder modifucar el día anterior
+- [x] Poder modificar el día anterior
 
 ## Instalación
 

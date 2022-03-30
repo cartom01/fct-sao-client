@@ -25,7 +25,7 @@ weekday = format_date(d, "EEEE", locale='es').capitalize()
 options = webdriver.ChromeOptions()
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
-options.add_argument("--headless")
+#options.add_argument("--headless")
 driver = webdriver.Chrome(service=service_object, options=options)
 
 # Open the website
@@ -89,7 +89,7 @@ print("\nHola " + student_name[0].capitalize() + "\nHoy es " + weekday + "\n")
 print(driver.find_element(By.XPATH,'//select[@id="semanaDiario"]/option[@selected="selected"]').text)
 
 # Print table
-for i in range(0,5):
+for i in range(0,(int(get_weekday_number())+1)):
     print(get_number_weekday(i))
     pretty = PrettyTable()
     pretty._max_width = {"Descripción Actividad":30}
@@ -103,6 +103,10 @@ for i in range(0,5):
     pretty.add_row(celda_list)
     print(pretty)
 
+eleccion_dia = input("¿Quieres modificar el día de hoy o ayer? (HOY/ayer)").lower()
+if eleccion_dia == "ayer":
+    weekday = get_number_weekday(int(get_weekday_number())-1)
+
 # Find today's modify button
 today_p = driver.find_element(By.XPATH,'//span[text()="'+weekday+'"]/preceding-sibling::a/img')
 today_p.click()
@@ -111,16 +115,16 @@ time.sleep(3)
 
 # Send Descripción Actividad
 descripcion_actividad = driver.find_element(By.XPATH,'//textarea[@id="descripcion' + get_weekday_number() + '"]')
-eleccion = input("¿Quieres modificar el campo Descripción Actividad de hoy " + weekday + "? (s/N): ").lower()
+eleccion = input("¿Quieres modificar el campo Descripción Actividad del " + weekday + "? (s/N): ").lower()
 if eleccion == "s":
     descripcion_actividad.clear()
-    descripcion_actividad_input = input("\n¿Qué has hecho hoy?: \n")
+    descripcion_actividad_input = input("\n¿Qué has hecho?: \n")
     descripcion_actividad.send_keys(descripcion_actividad_input)
 
 # Send Horas
 horas_object = driver.find_element(By.XPATH,'//input[@id="tiempo' + get_weekday_number() + '"]')
 horas_object.clear()
-horas_input = int(input("\n¿Cuántas horas has hecho hoy? - [Por defecto: 8] ") or "8")
+horas_input = int(input("\n¿Cuántas horas has hecho? - [Por defecto: 8] ") or "8")
 horas_object.send_keys(horas_input)
 
 # Click send
