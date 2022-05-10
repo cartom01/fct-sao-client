@@ -103,7 +103,8 @@ for i in range(0,(int(get_weekday_number())+1)):
     pretty.add_row(celda_list)
     print(pretty)
 
-eleccion_dia = input("¿Quieres modificar el día de hoy o ayer? (HOY/ayer)").lower()
+if weekday != "Lunes":
+    eleccion_dia = input("¿Quieres modificar el día de hoy o ayer? (HOY/ayer)").lower()
 if eleccion_dia == "ayer":
     weekday = get_number_weekday(int(get_weekday_number())-1)
 
@@ -136,7 +137,9 @@ driver.refresh()
 time.sleep(2)
 horas = driver.find_element(By.XPATH,'//*[@id="contenedorDetallesFCT"]/table/tbody/tr[14]/td[4]').text.replace(" ","").split('/')
 horas_restantes = int(horas[1]) - int(horas[0])
-print("\n\nLlevas " + horas[0] + " horas\nTe quedan " + str(horas_restantes) + " horas\nA razón de 8 horas diarias aún te quedan " + str(horas_restantes/8) + " días")
+print("\n\nLlevas " + horas[0] + " horas\nTe quedan " + str(horas_restantes) + " horas\n")
+print("A razón de 8 horas diarias aún te quedan " + str(horas_restantes/8) + " días\n")
+print("A razón de 5 días a la semana te quedan " + str((horas_restantes/8)/5) + " semanas")
 print("\nTe quedan " + str(4 - int(get_weekday_number())) + " días para acabar la semana")
 
 # Log out
