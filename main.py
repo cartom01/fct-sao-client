@@ -25,7 +25,7 @@ weekday = format_date(d, "EEEE", locale='es').capitalize()
 options = webdriver.ChromeOptions()
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
-#options.add_argument("--headless")
+options.add_argument("--headless")
 driver = webdriver.Chrome(service=service_object, options=options)
 
 # Open the website
