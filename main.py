@@ -105,8 +105,8 @@ for i in range(0,(int(get_weekday_number())+1)):
 
 if weekday != "Lunes":
     eleccion_dia = input("¿Quieres modificar el día de hoy o ayer? (HOY/ayer)").lower()
-if eleccion_dia == "ayer":
-    weekday = get_number_weekday(int(get_weekday_number())-1)
+    if eleccion_dia == "ayer":
+        weekday = get_number_weekday(int(get_weekday_number())-1)
 
 # Find today's modify button
 today_p = driver.find_element(By.XPATH,'//span[text()="'+weekday+'"]/preceding-sibling::a/img')
